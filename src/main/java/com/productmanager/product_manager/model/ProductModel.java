@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ProductDb")
-@AllArgsConstructor
-@NoArgsConstructor
 public class ProductModel {
 
     @Id
@@ -50,6 +48,28 @@ public class ProductModel {
 
     private String createdBy;
     private String updatedBy;
+
+    public ProductModel() {
+
+    }
+
+    public ProductModel(Long idProduct, String reference, String name, String description, BigDecimal price, BigDecimal costPrice, Integer quantity, String currency, Double discount, String brand, Long categoryId, LocalDateTime createdAt, LocalDateTime updatedAt, String createdBy, String updatedBy) {
+        this.idProduct = idProduct;
+        this.reference = reference;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.costPrice = costPrice;
+        this.quantity = quantity;
+        this.currency = currency;
+        this.discount = discount;
+        this.brand = brand;
+        this.categoryId = categoryId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+    }
 
     @PrePersist
     public void onCreate() {
@@ -165,37 +185,5 @@ public class ProductModel {
         this.updatedAt = updatedAt;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public ProductModel(Integer quantity, Long idProduct, String reference, String name, String description, BigDecimal price, BigDecimal costPrice, String currency, Double discount, String brand, Long categoryId, LocalDateTime createdAt, LocalDateTime updatedAt, String createdBy, String updatedBy) {
-        this.quantity = quantity;
-        this.idProduct = idProduct;
-        this.reference = reference;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.costPrice = costPrice;
-        this.currency = currency;
-        this.discount = discount;
-        this.brand = brand;
-        this.categoryId = categoryId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-    }
 }

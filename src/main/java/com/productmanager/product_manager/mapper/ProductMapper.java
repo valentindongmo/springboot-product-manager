@@ -10,6 +10,7 @@ public class ProductMapper {
 
     public static ProductModel toEntity(ProductRequestDto dto) {
         if (dto == null) return null;
+
         ProductModel product = new ProductModel();
         product.setReference(dto.reference());
         product.setName(dto.name());
@@ -23,8 +24,10 @@ public class ProductMapper {
         product.setCategoryId(dto.categoryId());
         return product;
     }
+
     public static ProductResponseDto toResponse(ProductModel product) {
         if (product == null) return null;
+
         return new ProductResponseDto(
                 product.getIdProduct(),
                 product.getReference(),

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record ProductResponseDto(
+
         Long idProduct,
         String reference,
         String name,
@@ -17,5 +18,4 @@ public record ProductResponseDto(
         Long categoryId,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
-) {
-}
+) {}
