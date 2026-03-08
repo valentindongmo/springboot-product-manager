@@ -1,8 +1,6 @@
 package com.productmanager.product_manager.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -12,38 +10,39 @@ public class ProductModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 150)
+    @Column(nullable = false, length = 150)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private Integer quantity;
 
-    @Column(name = "category", nullable = false, length = 100)
-    private String category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private CategoryModel category;
 
-    @Column(name = "active", nullable = false)
+    @Column(nullable = false)
     private Boolean active;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    /* ==========================
-       CONSTRUCTEURS
-       ========================== */
-
-    public ProductModel() {
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 
-    public ProductModel(Long id, String name, String description, BigDecimal price, Integer quantity, String category, Boolean active, LocalDateTime createdAt) {
+    public ProductModel() {}
+
+    public ProductModel(Long id, String name, String description, BigDecimal price, Integer quantity, CategoryModel category, Boolean active, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -54,20 +53,7 @@ public class ProductModel {
         this.createdAt = createdAt;
     }
 
-    public ProductModel(Long id, @NotBlank(message = "Le nom du produit est obligatoire") @Size(min = 3, max = 100, message = "Le nom doit contenir entre 3 et 100 caractères") String name, @Size(max = 255, message = "La description ne doit pas dépasser 255 caractères") String description, @NotNull(message = "Le prix est obligatoire") @DecimalMin(value = "0.0", inclusive = false, message = "Le prix doit être supérieur à 0") BigDecimal price, @NotNull(message = "La quantité est obligatoire") @Min(value = 0, message = "La quantité ne peut pas être négative") Integer quantity, @NotBlank(message = "La catégorie est obligatoire") String category, @NotNull(message = "Le statut est obligatoire") Boolean active) {
-    }
-   /* ==========================
-       PRE-PERSIST
-       ========================== */
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    /* ==========================
-       GETTERS & SETTERS
-       ========================== */
+    // ===== Getters & Setters =====
 
     public Long getId() {
         return id;
@@ -105,11 +91,11 @@ public class ProductModel {
         this.quantity = quantity;
     }
 
-    public String getCategory() {
+    public CategoryModel getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(CategoryModel category) {
         this.category = category;
     }
 
@@ -123,5 +109,11 @@ public class ProductModel {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void setId(long l) {
+    }
+
+    public void setCreatedAt(LocalDateTime now) {
     }
 }

@@ -2,52 +2,42 @@ package com.productmanager.product_manager.mapper;
 
 import com.productmanager.product_manager.dto.ProductRequestDto;
 import com.productmanager.product_manager.dto.ProductResponseDto;
+import com.productmanager.product_manager.model.CategoryModel;
 import com.productmanager.product_manager.model.ProductModel;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductMapper {
 
-    /**
-     * Convertit ProductRequestDto → ProductModel
-     */
-    public ProductModel toEntity(ProductRequestDto requestDto) {
-        return new ProductModel(
-                requestDto.id(),
-                requestDto.name(),
-                requestDto.description(),
-                requestDto.price(),
-                requestDto.quantity(),
-                requestDto.category(),
-                requestDto.active()
-        );
+    private final CategoryMapper categoryMapper;
+
+    public ProductMapper(CategoryMapper categoryMapper) {
+        this.categoryMapper = categoryMapper;
     }
 
-    /**
-     * Convertit ProductModel → ProductResponseDto
-     */
-    public ProductResponseDto toDto(ProductModel product) {
+    // Conversion DTO -> Entity
+    public ProductModel toEntity(ProductRequestDto dto, CategoryModel category) {
+        ProductModel product = new ProductModel();
+        product.setName(dto.name());
+        product.setDescription(dto.description());
+        product.setPrice(dto.price());
+        product.setQuantity(dto.quantity());
+        product.setCategory(category); // Lier la catégorie
+        product.setActive(dto.active());
+        return product;
+    }
+
+    // Conversion Entity -> DTO
+    public ProductResponseDto toResponseDto(ProductModel product) {
         return new ProductResponseDto(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
                 product.getQuantity(),
-                product.getCategory(),
-                product.getActive()
-                // ajouté pour correspondre au record ProductResponseDto
+                categoryMapper.toResponseDto(product.getCategory()), // injection utilisée
+                product.getActive(),
+                product.getCreatedAt()
         );
-    }
-
-    /**
-     * Met à jour un ProductModel existant avec les données du DTO
-     */
-    public void updateEntity(ProductModel product, ProductRequestDto requestDto) {
-        product.setName(requestDto.name());
-        product.setDescription(requestDto.description());
-        product.setPrice(requestDto.price());
-        product.setQuantity(requestDto.quantity());
-        product.setCategory(requestDto.category());
-        product.setActive(requestDto.active());
     }
 }
